@@ -18,7 +18,8 @@ Un script PHP para desenfocar texto específico en una imagen utilizando AWS Rek
 
 ## Uso
 
-```php
+```
+php
 require_once 'ImageBlurrer.php';
 
 // Si tienes las credenciales de AWS configuradas en tu máquina
@@ -32,13 +33,13 @@ $blurredImage = $blurrer->blurImage($base64Image);
 
 // Hacer algo con la imagen desenfocada...
 echo '<img src="' . $blurredImage . '" />';
+```
 
 # Configuración de AWS
 
 Asegúrate de configurar correctamente las credenciales de AWS y seleccionar la región correcta en el constructor de la clase ImageBlurrer. Debes tener permisos para usar el servicio AWS Rekognition.
 
 ```
-
 public function \_\_construct()
 {
 $this->client = new RekognitionClient([
@@ -135,6 +136,7 @@ $blurrer = new ImageBlurrer();
     }
 
 }
+```
 
 ## Configuración con AWS Rekognition
 
@@ -150,6 +152,6 @@ Las mejores prácticas para configurar AWS Rekognition incluyen:
 
 # Ejemplos
 
-![ejemplo 1](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot1.png?raw=true "1")
-![ejemplo 2](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot2.png?raw=true "2")
-![ejemplo 3](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot3.png?raw=true "3")
+<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot1.png" >
+<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot2.png" >
+<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot3.png" >
