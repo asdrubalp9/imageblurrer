@@ -152,6 +152,6 @@ Las mejores prácticas para configurar AWS Rekognition incluyen:
 
 # Ejemplos
 
-![1](screenshot_1.png)
-![2](screenshot_2.png)
-![3](screenshot_3.png)
+![1](Screenshot_1.png)
+![2](Screenshot_2.png)
+![3](Screenshot_3.png)
