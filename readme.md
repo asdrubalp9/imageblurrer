@@ -148,11 +148,8 @@ Las mejores prácticas para configurar AWS Rekognition incluyen:
 - Configurar una política de uso de datos para proteger tus imágenes.
 - Configurar límites de tarifa para evitar costos inesperados.
 
-```
-
 # Ejemplos
 
 ![ejemplo 1](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot1.png?raw=true "1")
 ![ejemplo 2](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot2.png?raw=true "2")
 ![ejemplo 3](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot3.png?raw=true "3")
-```
