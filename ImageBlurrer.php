@@ -10,12 +10,21 @@ class ImageBlurrer
     private $client;
     private $imageManager;
 
-    public function __construct()
+    public function __construct($accessKey = null, $secretKey = null)
     {
-        $this->client = new RekognitionClient([
+        $config = [
             'version' => 'latest',
             'region'  => 'us-west-2' // Cambia esto a tu región
-        ]);
+        ];
+
+        if ($accessKey && $secretKey) {
+            $config['credentials'] = [
+                'key'    => $accessKey,
+                'secret' => $secretKey,
+            ];
+        }
+
+        $this->client = new RekognitionClient($config);
 
         $this->imageManager = new ImageManager(['driver' => 'gd']);
     }
@@ -42,7 +51,7 @@ class ImageBlurrer
             $text = strtolower($text); // Convertir a minúsculas
             $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text); // Eliminar acentos
             $text = preg_replace('/[^a-zA-Z0-9]/', '', $text); // Eliminar caracteres especiales y guiones
-            echo '<br>' .  $text = str_replace(' ', '', $text); // Eliminar espacios
+            $text = str_replace(' ', '', $text); // Eliminar espacios
 
             // Verificar si el texto cumple con la expresión regular
             if (preg_match('/^(?:[A-Z]{2}[1-9]{1}[0-9]{3}|[BCDFGHJKLPRSTVWXYZ]{4}[0-9]{2}|[A-Z]{2}[0-9]{3}|[BCDFGHJKLPRSTVWXYZ]{3}[0-9]{2}|[A-Z]{2}[0]{1}[0-9]{3}|[BCDFGHJKLPRSTVWXYZ]{3}[0]{1}[0-9]{2}|[A-Z]{2}[O]{1}[0-9]{3}|[BCDFGHJKLPRSTVWXYZ]{3}[O]{1}[0-9]{2}|[A-Z]{2}[A-Z]{2}[0-9]{2})$/i', $text)) {

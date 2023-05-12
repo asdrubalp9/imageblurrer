@@ -1,54 +1,55 @@
-# PlateBlurrer
+# ImageBlurrer
 
-Este proyecto consta de una clase PHP llamada ImageBlurrer que recibe una imagen en cualquier formato en formato Base64. Envía esta imagen a AWS Rekognition para detectar texto en la imagen, luego verifica si el texto detectado coincide con una expresión regular específica. Si es así, la clase aplica un rectángulo negro sobre la región de texto en la imagen para hacerla ilegible. Finalmente, la imagen modificada se devuelve en formato Base64.
+Un script PHP para desenfocar texto específico en una imagen utilizando AWS Rekognition y la biblioteca de imágenes de Intervención.
 
-# Requisitos
+## Requisitos
 
-- PHP 7.1 o superior
-- Composer
-- AWS SDK for PHP
-- Intervention Image
-- Cuenta de AWS y acceso a AWS Rekognition
+1. PHP 7.4 o superior
+2. [Composer](https://getcomposer.org/)
+3. [AWS SDK para PHP](https://aws.amazon.com/sdk-for-php/)
+4. [Biblioteca de imágenes de Intervención](http://image.intervention.io/)
+5. Credenciales de AWS configuradas en tu máquina o pasadas como argumentos al constructor de `ImageBlurrer`.
 
-# Instalación
+## Instalación
 
-- Clona o descarga este repositorio.
-- Navega al directorio del proyecto a través de la línea de comandos.
-- Ejecuta composer install para instalar las dependencias del proyecto.
+1. Clona este repositorio a tu máquina local o descárgalo como un archivo zip y descomprímelo.
+2. Navega a la carpeta del proyecto en tu terminal y ejecuta `composer install` para instalar las dependencias.
+3. Configura tus credenciales de AWS en tu máquina o pásalas como argumentos al constructor de `ImageBlurrer`.
 
-# Uso
+## Uso
 
-La clase ImageBlurrer se puede usar de la siguiente manera:
+```php
+require_once 'ImageBlurrer.php';
 
-```
-require 'ImageBlurrer.php';
-
+// Si tienes las credenciales de AWS configuradas en tu máquina
 $blurrer = new ImageBlurrer();
 
-// Carga una imagen y codifica en Base64
-$imagePath = 'path/to/your/image.jpg';
-$base64Image = base64_encode(file_get_contents($imagePath));
+// Si prefieres pasar las credenciales como argumentos
+// $blurrer = new ImageBlurrer('your-access-key', 'your-secret-key');
 
-// Usa el blurrer para desenfocar el texto en la imagen
-$result = $blurrer->blurImage($base64Image);
+$base64Image = base64_encode(file_get_contents('path/to/your/image.jpg'));
+$blurredImage = $blurrer->blurImage($base64Image);
 
-// $result contiene la imagen desenfocada en formato Base64
-```
+// Hacer algo con la imagen desenfocada...
+echo '<img src="' . $blurredImage . '" />';
 
 # Configuración de AWS
 
 Asegúrate de configurar correctamente las credenciales de AWS y seleccionar la región correcta en el constructor de la clase ImageBlurrer. Debes tener permisos para usar el servicio AWS Rekognition.
 
 ```
-public function __construct()
+
+public function \_\_construct()
 {
-    $this->client = new RekognitionClient([
-        'version' => 'latest',
-        'region'  => 'us-west-2' // Cambia esto a tu región
-    ]);
+$this->client = new RekognitionClient([
+'version' => 'latest',
+'region' => 'us-west-2' // Cambia esto a tu región
+]);
 
     $this->imageManager = new ImageManager(['driver' => 'gd']);
+
 }
+
 ```
 
 # Notas
@@ -56,11 +57,13 @@ public function __construct()
 La función blurImage() puede lanzar una excepción si se produce un error durante el procesamiento de la imagen. Asegúrate de manejar estas excepciones en tu código.
 
 ```
+
 try {
-    $blurredImage = $blurrer->blurImage($base64Image);
+$blurredImage = $blurrer->blurImage($base64Image);
 } catch (Exception $e) {
-    // Manejo de errores
+// Manejo de errores
 }
+
 ```
 
 # Uso en Laravel
@@ -74,6 +77,7 @@ Asegúrate de que el espacio de nombres de la clase ImageBlurrer coincida con la
 En tu controlador, importa la clase ImageBlurrer y úsala para desenfocar las imágenes. Aquí hay un ejemplo:
 
 ```
+
 namespace App\Http\Controllers;
 
 use App\Services\ImageBlurrer;
@@ -81,18 +85,17 @@ use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
-    public function blurImage(Request $request)
-    {
-        $blurrer = new ImageBlurrer();
+public function blur(Request $request)
+{
+$blurrer = new ImageBlurrer();
 
-        $base64Image = base64_encode(file_get_contents($request->file('image')));
+    $base64Image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+    $blurredImage = $blurrer->blurImage($base64Image);
 
-        $result = $blurrer->blurImage($base64Image);
+    return view('blurred_image', ['image' => $blurredImage]);
 
-        // $result contiene la imagen desenfocada en formato Base64
-        // Puedes devolver este resultado como respuesta
-    }
 }
+
 ```
 
 # Uso en CakePHP
@@ -106,6 +109,7 @@ Asegúrate de que el espacio de nombres de la clase ImageBlurrer coincida con la
 En tu controlador, importa la clase ImageBlurrer y úsala para desenfocar las imágenes. Aquí hay un ejemplo:
 
 ```
+
 namespace App\Controller;
 
 use App\Service\ImageBlurrer;
@@ -113,9 +117,9 @@ use Cake\Http\Exception\InternalErrorException;
 
 class ImagesController extends AppController
 {
-    public function blurImage()
-    {
-        $blurrer = new ImageBlurrer();
+public function blurImage()
+{
+$blurrer = new ImageBlurrer();
 
         // Asegúrate de tener un manejo de archivos adecuado aquí
         $base64Image = base64_encode(file_get_contents($this->request->getData('image')));
@@ -129,12 +133,26 @@ class ImagesController extends AppController
         // $result contiene la imagen desenfocada en formato Base64
         // Puedes devolver este resultado como respuesta
     }
+
 }
+
+## Configuración con AWS Rekognition
+
+El script utiliza AWS Rekognition para detectar texto en las imágenes. Debes tener una cuenta de AWS y debes tener configuradas tus credenciales de AWS en tu máquina.
+
+Las mejores prácticas para configurar AWS Rekognition incluyen:
+
+- Configurar las credenciales de AWS en tu máquina utilizando el AWS CLI.
+- Utilizar roles de IAM para gestionar los permisos de tu aplicación.
+- Nunca subir tus credenciales de AWS a repositorios públicos.
+- Configurar una política de uso de datos para proteger tus imágenes.
+- Configurar límites de tarifa para evitar costos inesperados.
 
 ```
 
 # Ejemplos
 
-![ejemplo 1](.screenshot1.png?raw=true "1")
-![ejemplo 2](.screenshot1.png?raw=true "2")
-![ejemplo 3](.screenshot1.png?raw=true "3")
+![ejemplo 1](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot1.png?raw=true "1")
+![ejemplo 2](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot2.png?raw=true "2")
+![ejemplo 3](https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot3.png?raw=true "3")
+```
