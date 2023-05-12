@@ -152,6 +152,6 @@ Las mejores prácticas para configurar AWS Rekognition incluyen:
 
 # Ejemplos
 
-<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot1.png" >
-<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot2.png" >
-<img src="https://raw.githubusercontent.com/asdrubalp9/imageblurrer/main/screenshot3.png" >
+<img src="screenshot1.png" >
+<img src="screenshot2.png" >
+<img src="screenshot3.png" >
